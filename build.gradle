@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+    id 'application'
+    id "io.freefair.lombok" version "4.1.6"
+}
+
+group 'task_01'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+application {
+    mainClassName = "org.Main"
+}
+
+sourceSets {
+    main.java.srcDir("src/java")
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compileOnly 'org.projectlombok:lombok:1.18.10'
+    annotationProcessor 'org.projectlombok:lombok:1.18.10'
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.29'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.29'
+}
