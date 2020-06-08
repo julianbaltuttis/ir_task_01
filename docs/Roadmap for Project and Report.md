@@ -34,6 +34,8 @@ Lucene defines the building of a search engine as follows:
 5. Construct User Interface
 6. Build Query
 
+There already is an existing search engine framework that utilizes the args.me corpus. We can probably utilize much of the source code from it. The repository can be found [here](https://git.webis.de/code-research/arguana/args/args-framework).
+
 Regarding this structure, we need ...
 
 - **No** web crawler. The data we require is already contained in the the args.me corpus.
@@ -67,10 +69,13 @@ Example topic for **Task 1:**
 </topic>
 ```
 
+- The email is a lie. Instead we need to use the given [git repository](https://git.webis.de/code-teaching/readings/information-retrieval-ss20-leipzig) to extract the arguments. 
+
 ### Questions
 
-- So far we have not received any such email.
 - IIUC, we need to restrict the retrieval and construction of the search engine to the list of given topics.
+- `Dataset Touche` contains a file named `topics.xml` with 50 topics. Are these the topics we need to implement?
+- What are we supposed to do with the other data sets?
 - Why are the topics structured this way? Are we supposed to use that structure when building the index?
 - What is a baseline retrieval? How are we supposed to use/implement the API?
 
@@ -84,11 +89,24 @@ Example topic for **Task 1:**
 > 2. whether it is rhetorically well-written, and 
 > 3. whether it helps a user in their stance-building process, i.e., somewhat similar to the concept of "utility".
 
+The evaluation needs to be tackled in the lab report. It should be structured as follows:
+
+1.  Introduction 
+2.  Related Work 
+3.  Argument Retrieval Model(s) (i.e. a description of your contribution)
+4.  Evaluation 
+5.  Discussion and Conclusion 
+
+We need to ... 
+
+- Figure out which Retrieval Model we want to use.
+- Implement that model with Lucene in our source code.
+
 ### Questions
 
-- Is this the part that goes into the lab report?
 - What does **human assessor** mean in this context?
 - Are we supposed to analyse and evaluate the contents of the args.me database?
+- What are the different argument retrieval models? 
 
 
 
