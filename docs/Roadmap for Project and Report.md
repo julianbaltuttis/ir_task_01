@@ -8,6 +8,16 @@
 >
 > Submission: TIRA
 
+## Goal
+
+We need to 
+
+- Build a Search Engine with Lucene using the args.me corpus,
+- Research different methodologies for information retrieval,
+- Pick at least 2 of them for our search engine,
+- Apply it to our search engine and evaluate and compare the results,
+- Write the evaluation as a lab report.
+
 ### User Story
 
 We need to ...
@@ -70,11 +80,13 @@ Example topic for **Task 1:**
 ```
 
 - The email is a lie. Instead we need to use the given [git repository](https://git.webis.de/code-teaching/readings/information-retrieval-ss20-leipzig) to extract the arguments. 
+- The [args.me corpus](https://zenodo.org/record/3734893) can be downloaded as .json files online. However, we should be able to 
 
 ### Questions
 
 - IIUC, we need to restrict the retrieval and construction of the search engine to the list of given topics.
 - `Dataset Touche` contains a file named `topics.xml` with 50 topics. Are these the topics we need to implement?
+- Do we need to parse this xml in our source code?
 - What are we supposed to do with the other data sets?
 - Why are the topics structured this way? Are we supposed to use that structure when building the index?
 - What is a baseline retrieval? How are we supposed to use/implement the API?
@@ -83,11 +95,15 @@ Example topic for **Task 1:**
 
 ## Evaluation
 
-> For **Task 1**, be sure to retrieve good  ''strong'' arguments. Our human assessors will label the retrieved  documents manually, both for their general topical relevance, and for argument quality dimensions such as: 
+> For **Task 1**, be sure to retrieve good  ''strong'' arguments. Our human assessors will label the retrieved documents manually, both for their general topical relevance, and for argument quality dimensions such as: 
 >
 > 1. whether an argumentative text is logically cogent, 
 > 2. whether it is rhetorically well-written, and 
 > 3. whether it helps a user in their stance-building process, i.e., somewhat similar to the concept of "utility".
+
+- There are no actual human assessors. We can ignore this part.
+- We need at least 2 retrieval models that we can implement and test.
+- We need to test, compare and evaluate those two methods. That is the core of the lab report.
 
 The evaluation needs to be tackled in the lab report. It should be structured as follows:
 
@@ -99,7 +115,7 @@ The evaluation needs to be tackled in the lab report. It should be structured as
 
 We need to ... 
 
-- Figure out which Retrieval Model we want to use.
+- Figure out which two Retrieval Models we want to use.
 - Implement that model with Lucene in our source code.
 
 ### Questions
