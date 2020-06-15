@@ -30,7 +30,8 @@ dependencies {
     compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.29'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.29'
     compileOnly 'org.apache.lucene:lucene-core:3.5.0:sources'
-    compileOnly 'org.apache.lucene:lucene-queryparser:7.7.3'
+    compileOnly 'org.apache.lucene:lucene-queryparser:8.5.2'
+    compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '8.5.2'
 }
 
 
