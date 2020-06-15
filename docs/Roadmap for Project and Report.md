@@ -12,11 +12,12 @@
 
 We need to 
 
-- Build a Search Engine with Lucene using the args.me corpus,
-- Research different methodologies for information retrieval,
-- Pick at least 2 of them for our search engine,
-- Apply it to our search engine and evaluate and compare the results,
-- Write the evaluation as a lab report.
+1. Build a Search Engine with Lucene using the args.me corpus,
+2. Research different methodologies for information retrieval,
+3. Pick at least 2 of them for our search engine,
+4. Apply it to our search engine and evaluate and compare the results,
+5. Write the evaluation as a lab report.
+6. Create 3 runs in standard TREC format.
 
 ### User Story
 
@@ -27,7 +28,7 @@ We need to ...
 3. Use the args.me API for a baseline retrieval.
 4. Ensure that we retrieve **strong** arguments.
 5. Use Docker to convert and submit the final system to TIRA.
-6. Create a lab report, whatever that means.
+6. Create a lab report.
 
 
 
@@ -85,10 +86,17 @@ Example topic for **Task 1:**
 ### Questions
 
 - IIUC, we need to restrict the retrieval and construction of the search engine to the list of given topics.
+
 - `Dataset Touche` contains a file named `topics.xml` with 50 topics. Are these the topics we need to implement?
+
 - Do we need to parse this xml in our source code?
-- What are we supposed to do with the other data sets?
+
+- What are we supposed to do with the other data sets? No.
+
 - Why are the topics structured this way? Are we supposed to use that structure when building the index?
+
+  We only need the number and the title. Title is for the query content.
+
 - What is a baseline retrieval? How are we supposed to use/implement the API?
 
 
@@ -104,6 +112,8 @@ Example topic for **Task 1:**
 - There are no actual human assessors. We can ignore this part.
 - We need at least 2 retrieval models that we can implement and test.
 - We need to test, compare and evaluate those two methods. That is the core of the lab report.
+- Tira can automate the evaluation process.
+- We need to interpret and analyse the results that Tira provides.
 
 The evaluation needs to be tackled in the lab report. It should be structured as follows:
 
@@ -120,8 +130,8 @@ We need to ...
 
 ### Questions
 
-- What does **human assessor** mean in this context?
-- Are we supposed to analyse and evaluate the contents of the args.me database?
+- What does **human assessor** mean in this context? Not relevant.
+- Are we supposed to analyse and evaluate the contents of the args.me database? Depends on the lab report.
 - What are the different argument retrieval models? 
 
 
@@ -132,21 +142,51 @@ We need to ...
 >
 > Runs may be either automatic or manual. An automatic run does not use  the topic descriptions or narratives and must not "manipulate" the topic titles via manual intervention. A manual run is anything that is not an automatic run. Upon submission, please let us know which of your runs  are manual. For each topic, include up to 1,000 retrieved documents.                
 >
->  The submission format for the task will follow the standard TREC format: 
+> The submission format for the task will follow the standard TREC format: 
 >
 > ```
 > qid Q0 doc rank score tag
+> qid = topic number
+> Q0 = not relevant
+> doc = document ID from field id
+> rank = the rank that our search enginge has computed for this query
+> score = the score based on the aforementioned rank
+> tag = not relevant
 > ```
+
+## Lab Report
+
+The structure of the lab report should be as follows:
+
+1.  Introduction 
+2.  Related Work 
+3.  Argument Retrieval Model(s) (i.e., a description of your contribution)
+4.  Evaluation 
+5.  Discussion and Conclusion 
+
+
 
 ### Questions
 
-- [ ] What is a standard TREC format?
-
-- [ ] What is a run?
-
+- [x] What is a standard TREC format?
+- [x] What is a run?
 - [ ] Aren't we supposed to use Docker at this stage?
+- [ ] Does Lucene have classes for information retrieval methods or is this something we need to implement manually?
+- [ ] What retrieval method is used by args.me? Bm25
+- [ ] What should our abstract be? 
 
-  
+## Questions session
+
+- args.me uses bm25 as retrieval model
+- Tira needs the complete index, as part of the docker image to work
+- A run is a search engine output.
+- Baseline ist der score der auf standard einstellungen läuft
+- Lucene already provides a stop list.
+- We need to analyze the json corpus in order to figure out more stop words
+- Tira can automate the evaluation process.
+- the abstract should be a single paragraph that summarizes our entire lab report.
+
+
 
 
 

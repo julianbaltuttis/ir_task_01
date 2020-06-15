@@ -1,6 +1,6 @@
 # IR: Lab Class
 
-![image-20200510163507437](IR_Lab.assets/image-20200510163507437-1589269516727.png)
+![image-20200510163507437](IR_Lab.assets/image-20200510163507437.png)
 
 ## TODOs
 
@@ -71,7 +71,7 @@ The major steps in inverted index construction are ...
 - Is schema independent. In other words, it makes no assumptions about the structure of the document
 - Because the size of an inverted list is on the same order of magnitude as the document collection itself, care must be taken that index access and update operations are performed eﬃciently.
 
-![image-20200511152709278](IR_Lab.assets/image-20200511152709278-1589269516728.png)
+![image-20200511152709278](IR_Lab.assets/image-20200511152709278.png)
 
 <div style="text-align:center">A schema-independent inverted index for Shakespeare’s plays. The dictionary provides a mapping from terms to their positions of occurrence.</div>
 
@@ -90,7 +90,7 @@ The major steps in inverted index construction are ...
 
 ### Typical Components of Search Engines
 
-![image-20200512084544977](IR_Lab.assets/image-20200512084544977-1589269516728.png)
+![image-20200512084544977](IR_Lab.assets/image-20200512084544977.png)
 
 <div style="text-align:center">McCandless 12.5: Typical components of search application</div>
 
