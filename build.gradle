@@ -32,6 +32,8 @@ dependencies {
     compileOnly 'org.apache.lucene:lucene-core:3.5.0:sources'
     compileOnly 'org.apache.lucene:lucene-queryparser:8.5.2'
     compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '8.5.2'
+    compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
 }
 
 
