@@ -1,5 +1,7 @@
 package org;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -19,6 +21,8 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Set;
 
+@Setter
+@Getter
 
 public class Indexer {
 
@@ -28,12 +32,12 @@ public class Indexer {
 
     IndexWriter indexWriter = null;
 
-    public Indexer(String indexPath, String jsonFilePath) {
+    boolean overwrite = true;
+
+    public Indexer(String indexPath, String jsonFilePath, boolean overwrite) {
         this.indexPath = indexPath;
         this.jsonFilePath = jsonFilePath;
-    }
-    public Indexer(String jsonFilePath) {
-        this.jsonFilePath = jsonFilePath;
+        this.overwrite = overwrite;
     }
 
     public void createIndex(){
@@ -67,7 +71,12 @@ public class Indexer {
             Analyzer analyzer = new StandardAnalyzer();
             IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
 
-            iwc.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+            if(overwrite) {
+                iwc.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+            } else {
+                iwc.setOpenMode(IndexWriterConfig.OpenMode.APPEND);
+            }
+
             indexWriter = new IndexWriter(dir, iwc);
 
             return true;
