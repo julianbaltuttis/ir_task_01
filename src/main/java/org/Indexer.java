@@ -46,13 +46,16 @@ public class Indexer {
         InputStream jsonFile = getClass().getResourceAsStream(jsonFilePath);
         Reader readerJson = new InputStreamReader(jsonFile);
 
-        Object fileObjects = JSONValue.parse(readerJson);
-        JSONObject object = (JSONObject) fileObjects;
-        Object fileArray = object.get("arguments");
+        Object fileArray = ((JSONObject) JSONValue.parse(readerJson)).get("arguments");
+        readerJson.close();
+        jsonFile.close();
 
-        JSONArray arrayObjects = (JSONArray) fileArray;
-        return arrayObjects;
+        return (JSONArray) fileArray;
+
     }catch(NullPointerException e){
+        e.printStackTrace();
+        return null;
+    } catch (IOException e) {
         e.printStackTrace();
         return null;
     }

@@ -9,21 +9,21 @@ public class Main {
         log.info("--> Main().");
         System.out.println("Hello World!");
 
-        Indexer index = new Indexer("indexDir","/parliamentary.json", true);
+        Indexer index = new Indexer("indexDir","/debateorg.json", true);
         index.createIndex();
 
-        index.setOverwrite(false);
-        index.setJsonFilePath("/debateorg.json");
-        index.createIndex();
+        //index.setOverwrite(false);
+        //index.setJsonFilePath("/debateorg.json");
+       // index.createIndex();
 
-        index.setJsonFilePath("/debatepedia.json");
-        index.createIndex();
+       // index.setJsonFilePath("/debatepedia.json");
+        //index.createIndex();
 
-        index.setJsonFilePath("/debatewise.json");
-        index.createIndex();
+        //index.setJsonFilePath("/debatewise.json");
+        //index.createIndex();
 
-        index.setJsonFilePath("/idebate.json");
-        index.createIndex();
+        //index.setJsonFilePath("/idebate.json");
+        //index.createIndex();
 
         log.info("<-- Main().");
     }
