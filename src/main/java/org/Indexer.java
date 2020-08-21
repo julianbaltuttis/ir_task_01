@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 
-public class InMemorySearchEngine {
+public class Indexer {
 
     String indexPath = "";
 
@@ -28,11 +28,11 @@ public class InMemorySearchEngine {
 
     IndexWriter indexWriter = null;
 
-    public InMemorySearchEngine(String indexPath, String jsonFilePath) {
+    public Indexer(String indexPath, String jsonFilePath) {
         this.indexPath = indexPath;
         this.jsonFilePath = jsonFilePath;
     }
-    public InMemorySearchEngine(String jsonFilePath) {
+    public Indexer(String jsonFilePath) {
         this.jsonFilePath = jsonFilePath;
     }
 
@@ -40,7 +40,7 @@ public class InMemorySearchEngine {
         JSONArray jsonObjects = parseJSONFile();
         openIndex();
         addDocuments(jsonObjects);
-        //finish();
+        finish();
     }
     public JSONArray parseJSONFile() {
     try {
@@ -58,11 +58,14 @@ public class InMemorySearchEngine {
         return null;
     }
     }
+
     public boolean openIndex() {
         try {
-            Directory dir = FSDirectory.open(Paths.get(indexPath));
+            File indexDirectory = new File(indexPath);
+            Directory dir = FSDirectory.open(indexDirectory.toPath());
+
             Analyzer analyzer = new StandardAnalyzer();
-            IndexWriterConfig iwc = new IndexWriterConfig();
+            IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
 
             iwc.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
             indexWriter = new IndexWriter(dir, iwc);
@@ -88,10 +91,23 @@ public class InMemorySearchEngine {
 
             doc.add(new StringField("sourceID", (String)((JSONObject)object.get("context")).get("sourceId"), Field.Store.NO));
 
-
+            try {
+                indexWriter.addDocument(doc);
+            } catch (IOException e) {
+                System.err.println("Error adding documents to the index" + e.getMessage());
             }
         }
     }
+    public void finish() {
+        try{
+            indexWriter.commit();
+            indexWriter.close();
+        } catch (IOException e) {
+            System.err.println("We had a problem closing the index: "+ e.getMessage());
+        }
+
+    }
+}
 
 
 
