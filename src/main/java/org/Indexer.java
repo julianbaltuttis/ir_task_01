@@ -1,13 +1,13 @@
 package org;
 
-import lombok.Getter;
+
 import lombok.Setter;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
-import org.apache.lucene.document.TextField;
+
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.*;
@@ -16,23 +16,18 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.Set;
 
-@Setter
-@Getter
 
 public class Indexer {
 
-    String indexPath = "";
+    private String indexPath = "";
 
-    String jsonFilePath ="";
+    private @Setter String jsonFilePath ="";
 
-    IndexWriter indexWriter = null;
+    private IndexWriter indexWriter = null;
 
-    boolean overwrite = true;
+    private @Setter boolean overwrite = true;
 
     public Indexer(String indexPath, String jsonFilePath, boolean overwrite) {
         this.indexPath = indexPath;
