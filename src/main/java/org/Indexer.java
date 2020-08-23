@@ -90,11 +90,13 @@ public class Indexer {
 
             return true;
         } catch (Exception e) {
-            log.error("Error openin the index." + e.getMessage());
+            log.error("Error opening the index." + e.getMessage());
         }
         return false;
     }
     public void addDocuments() {
+        log.info("--> addDocuments().");
+
         File jsonFile = new File(jsonFilePath);
         JsonFactory jsonfactory = new JsonFactory();
         int numberOfRecords = 0;
@@ -168,8 +170,11 @@ public class Indexer {
                 }
                 jsonToken = jsonParser.nextToken();
             }
+            log.info("Records found: "+ numberOfRecords);
         } catch(IOException e) {
             log.error("Failed parsing JSON file"+ e.getMessage());
+        } finally {
+            log.info("<-- addDocuments().");
         }
     }
     public void addDocuments(JSONArray jsonObjects) {
