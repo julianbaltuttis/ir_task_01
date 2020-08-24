@@ -4,6 +4,10 @@ package org;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.apache.lucene.analysis.Analyzer;
@@ -14,6 +18,7 @@ import org.apache.lucene.document.StringField;
 
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.store.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -34,6 +39,8 @@ public class Indexer {
     public static final String DOC_STANCE="stance";
     public static final String DOC_CONTEXT="context";
     public static final String DOC_SOURCE_ID="sourceId";
+    public static final String DOC_ANNOTATIONS="annotations";
+    public static final String DOC_ASPECTS="aspects";
 
     private String indexPath = "";
 
@@ -53,7 +60,8 @@ public class Indexer {
         //JSONArray jsonObjects = parseJSONFile();
         openIndex();
         //addDocuments(jsonObjects);
-        addDocuments();
+        //addDocuments();
+        addDocuments2();
         finish();
     }
     public JSONArray parseJSONFile() {
@@ -105,76 +113,115 @@ public class Indexer {
             JsonParser jsonParser = jsonfactory.createParser(jsonFile);
             Document doc = new Document();
 
-            JsonToken jsonToken = jsonParser.nextToken();
-            while (jsonToken != JsonToken.END_OBJECT) {
+
+            
+            while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
                 String fieldName = jsonParser.getCurrentName();
 
+                System.out.println("FieldName: "+fieldName);
+                
                 if(DOC_ARGUMENTS.equals(fieldName)) {
-                    jsonToken = jsonParser.nextToken();
 
                     while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                         String argumentFieldName =jsonParser.getCurrentName();
 
+                        System.out.println("ArguementFieldName: "+argumentFieldName);
+
                         if(DOC_ID.equals(argumentFieldName)){
-                            jsonToken = jsonParser.nextToken();
                             doc.add(new StringField(argumentFieldName, jsonParser.getText(), Field.Store.NO));
+                            jsonParser.nextToken();
+                            continue;
                         }
 
                         if(DOC_CONCLUSION.equals(argumentFieldName)){
-                            jsonToken =jsonParser.nextToken();
                             doc.add(new StringField(argumentFieldName, jsonParser.getText(),Field.Store.YES));
+                            jsonParser.nextToken();
+                            continue;
                         }
 
                         if(DOC_PREMISES.equals(argumentFieldName)){
-                            jsonToken = jsonParser.nextToken();
+
                             while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                                 String premiseFieldName = jsonParser.getCurrentName();
 
+                                System.out.println("PremiseFieldName: "+premiseFieldName);
+
                                 if(DOC_TEXT.equals(premiseFieldName)) {
-                                    jsonToken = jsonParser.nextToken();
                                     doc.add(new StringField(premiseFieldName, jsonParser.getText(), Field.Store.NO));
+                                    jsonParser.nextToken();
+                                    continue;
                                 }
 
                                 if(DOC_STANCE.equals(premiseFieldName)) {
-                                    jsonToken = jsonParser.nextToken();
                                     doc.add(new StringField(premiseFieldName, jsonParser.getText(), Field.Store.YES));
+                                    jsonParser.nextToken();
+                                    continue;
                                 }
-                                else {
-                                    jsonToken = jsonParser.nextToken();
+                                if(DOC_ANNOTATIONS.equals(premiseFieldName)) {
+
+                                    while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
+                                        jsonParser.nextToken();
+                                        System.out.println("Annotations loop");
+                                    }
                                 }
+                                jsonParser.nextToken();
 
                             }
                         }
+                        if(DOC_ASPECTS.equals(argumentFieldName)){
+                            while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
+                                jsonParser.nextToken();
+                                System.out.println("Aspects loop");
 
-                        if(DOC_CONTEXT.equals(argumentFieldName)) {
-                            jsonToken = jsonParser.nextToken();
-                            while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
-                                String contextFieldName = jsonParser.getCurrentName();
-
-                                if(DOC_SOURCE_ID.equals(contextFieldName)) {
-                                    jsonToken = jsonParser.nextToken();
-                                    doc.add(new StringField(contextFieldName, jsonParser.getText(), Field.Store.NO));
-                                }
-                                else {
-                                    jsonToken = jsonParser.nextToken();
-                                }
                             }
+                            continue;
                         }
-                        if(jsonToken == JsonToken.END_OBJECT) {
+
+                        if(DOC_SOURCE_ID.equals(argumentFieldName)) {
+                            doc.add(new StringField(argumentFieldName, jsonParser.getText(), Field.Store.NO));
+                            jsonParser.nextToken();
+                            continue;
+
+                        }
+                        if(jsonParser.nextToken() == JsonToken.END_OBJECT) {
                             indexWriter.addDocument(doc);
                             doc = new Document();
                             numberOfRecords++;
+                            jsonParser.nextToken();
                         }
-                        jsonToken = jsonParser.nextToken();
+                        jsonParser.nextToken();
                     }
                 }
-                jsonToken = jsonParser.nextToken();
+                jsonParser.nextToken();
             }
             log.info("Records found: "+ numberOfRecords);
         } catch(IOException e) {
             log.error("Failed parsing JSON file"+ e.getMessage());
         } finally {
             log.info("<-- addDocuments().");
+        }
+    }
+    public void addDocuments2(){
+        try{
+            File jsonFile = new File(jsonFilePath);
+            int numberOfRecords = 0;
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
+            JsonParser jsonParser = mapper.getFactory().createParser(jsonFile);
+            JsonNode arguments = mapper.readTree(jsonFile).at("/arguments");
+
+            jsonParser.nextToken();
+
+            while(jsonParser.nextToken() != JsonToken.END_ARRAY) {
+
+                Argument argument = mapper.readValue(jsonParser, Argument.class);
+                numberOfRecords++;
+            }
+            log.info("Records: "+ numberOfRecords);
+        }catch (IOException e) {
+            log.error(e.getMessage());
         }
     }
     public void addDocuments(JSONArray jsonObjects) {
@@ -207,6 +254,27 @@ public class Indexer {
             System.err.println("We had a problem closing the index: "+ e.getMessage());
         }
 
+    }
+    public void test() {
+        File jsonFile = new File(jsonFilePath);
+        JsonFactory jsonfactory = new JsonFactory();
+        int numberOfRecords = 0;
+        try {
+
+            JsonParser jsonParser = jsonfactory.createParser(jsonFile);
+            Document doc = new Document();
+
+
+            jsonParser.nextToken();
+
+            while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
+                String fieldName = jsonParser.getCurrentName();
+                System.out.println("FieldName: " + fieldName);
+                jsonParser.nextToken();
+            }
+        }catch (IOException e) {
+            log.error(e.getMessage());
+        }
     }
 }
 

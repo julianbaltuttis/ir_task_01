@@ -9,8 +9,9 @@ public class Main {
         log.info("--> Main().");
         System.out.println("Hello World!");
 
-        Indexer index = new Indexer("indexDir","codebase/parliamentary.json", true);
+        Indexer index = new Indexer("indexDir","codebase/debateorg.json", true);
         index.createIndex();
+        //index.test();
 
         //index.setOverwrite(false);
         //index.setJsonFilePath("/debateorg.json");
