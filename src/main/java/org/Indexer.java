@@ -52,7 +52,7 @@ public class Indexer {
             File indexDirectory = new File(indexPath);
             Directory dir = FSDirectory.open(indexDirectory.toPath());
 
-            Analyzer analyzer = new WhitespaceAnalyzer();
+            Analyzer analyzer = new StandardAnalyzer();
             IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
 
             if(overwrite) {
