@@ -3,12 +3,20 @@ package org;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.core.WhitespaceTokenizerFactory;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-
+@Log4j
 @Setter
 @Getter
 public class Argument {
@@ -51,6 +59,22 @@ public class Argument {
 
         doc.add(new StringField(DOC_SOURCE_ID, context.get(DOC_SOURCE_ID).asText(), Field.Store.NO));
         return doc;
+    }
+    public List<String> analyze(String text, Analyzer analyzer) {
+        try {
+            List<String> result = new ArrayList<>();
+            TokenStream tokenStream = analyzer.tokenStream(DOC_TEXT, text);
+            CharTermAttribute attr = tokenStream.addAttribute(CharTermAttribute.class);
+            tokenStream.reset();
+
+            while(tokenStream.incrementToken()) {
+                result.add(attr.toString());
+            }
+            return result;
+        }catch (IOException e) {
+            log.error(e.getMessage());
+        }
+        return null;
     }
 
 }

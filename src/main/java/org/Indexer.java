@@ -11,6 +11,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -51,7 +52,7 @@ public class Indexer {
             File indexDirectory = new File(indexPath);
             Directory dir = FSDirectory.open(indexDirectory.toPath());
 
-            Analyzer analyzer = new StandardAnalyzer();
+            Analyzer analyzer = new WhitespaceAnalyzer();
             IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
 
             if(overwrite) {
