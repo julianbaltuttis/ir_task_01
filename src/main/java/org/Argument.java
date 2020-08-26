@@ -12,6 +12,7 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,31 +51,16 @@ public class Argument {
     public Document getArgumentAsDocument() {
         Document doc = new Document();
         doc.add(new StringField(DOC_ID, id, Field.Store.NO));
-        doc.add(new StringField(DOC_CONCLUSION, conclusion, Field.Store.YES));
+        doc.add(new TextField(DOC_CONCLUSION, conclusion, Field.Store.YES));
 
         for(Premise premise : premises) {
-            doc.add(new StringField(DOC_TEXT, premise.getText(), Field.Store.NO));
-            doc.add(new StringField(DOC_SOURCE_ID, premise.getStance(), Field.Store.YES));
+
+            doc.add(new TextField(DOC_TEXT, premise.getText(), Field.Store.NO));
+            doc.add(new StringField(DOC_STANCE, premise.getStance(), Field.Store.YES));
         }
 
         doc.add(new StringField(DOC_SOURCE_ID, context.get(DOC_SOURCE_ID).asText(), Field.Store.NO));
         return doc;
-    }
-    public List<String> analyze(String text, Analyzer analyzer) {
-        try {
-            List<String> result = new ArrayList<>();
-            TokenStream tokenStream = analyzer.tokenStream(DOC_TEXT, text);
-            CharTermAttribute attr = tokenStream.addAttribute(CharTermAttribute.class);
-            tokenStream.reset();
-
-            while(tokenStream.incrementToken()) {
-                result.add(attr.toString());
-            }
-            return result;
-        }catch (IOException e) {
-            log.error(e.getMessage());
-        }
-        return null;
     }
 
 }
