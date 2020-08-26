@@ -1,14 +1,7 @@
 package org;
 
 import lombok.extern.log4j.Log4j;
-import org.apache.lucene.index.CompositeReader;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.LeafReader;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
 
-import java.io.File;
 import java.io.IOException;
 
 @Log4j
@@ -33,8 +26,13 @@ public class Main {
 
         index.setJsonFilePath("codebase/idebate.json");
         index.createIndex();*/
+        try {
+            QueryProcessor query = new QueryProcessor();
+            query.getQuery();
 
-
+        }catch (IOException e) {
+            log.error(e.getMessage());
+        }
         log.info("<-- Main().");
     }
 

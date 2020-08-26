@@ -55,7 +55,7 @@ public class Argument {
 
         for(Premise premise : premises) {
 
-            doc.add(new TextField(DOC_TEXT, premise.getText(), Field.Store.NO));
+            doc.add(new TextField(DOC_TEXT, premise.getText(), Field.Store.YES));
             doc.add(new StringField(DOC_STANCE, premise.getStance(), Field.Store.YES));
         }
 

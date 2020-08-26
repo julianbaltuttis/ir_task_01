@@ -29,8 +29,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.10'
     compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.29'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.29'
-    compileOnly 'org.apache.lucene:lucene-core:3.5.0:sources'
-    compileOnly 'org.apache.lucene:lucene-queryparser:8.5.2'
+    compile 'org.apache.lucene:lucene-core:3.5.0:sources'
+    compile 'org.apache.lucene:lucene-queryparser:8.5.2'
     compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '8.5.2'
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
@@ -41,7 +41,11 @@ dependencies {
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.11.2'
 }
 
-
+task runMain(group: "application", dependsOn:"classes",type: JavaExec) {
+    main = "org.Main"
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+}
 
 
 
