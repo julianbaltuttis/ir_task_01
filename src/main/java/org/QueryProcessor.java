@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
+//TODO add Tag attribute.
 @Log4j
 public class QueryProcessor {
     public static final String INDEX_DIR = "indexDir";
@@ -40,17 +40,15 @@ public class QueryProcessor {
         this.searcher = new IndexSearcher(indexReader);
     }
 
-    public List<Document> searchIndex (String query) {
+    public TopDocs searchIndex (String query) {
 
         try {
 
             MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[] {"conclusion","text"}, analyzer);
-            TopDocs topDocs = searcher.search(queryParser.parse(query),10);
+            TopDocs topDocs = searcher.search(queryParser.parse(query),SEARCH_RESULTS);
             List<Document> documents = new ArrayList<>();
-            for(ScoreDoc result : topDocs.scoreDocs) {
-                documents.add(searcher.doc(result.doc));
-            }
-            return documents;
+
+            return topDocs;
 
         } catch (IOException e) {
             log.error(e.getMessage());
@@ -59,28 +57,38 @@ public class QueryProcessor {
         }
         return null;
     }
-    public void getQuery() {
-        boolean quit = false;
-        while (!quit) {
-            System.out.println("Search for?");
-            Scanner inputScanner = new Scanner(System.in);
-            String userInput = inputScanner.nextLine();
-            List<Document> results = searchIndex(userInput);
-            for(Document doc : results) {
 
-                System.out.println(doc.get("conclusion"));
+    public List<Document> getDocumentsFromTopDocs(TopDocs topDocs) {
+        try{
+            List<Document> documents = new ArrayList<>();
+            for(ScoreDoc result : topDocs.scoreDocs) {
+                documents.add(searcher.doc(result.doc));
             }
-            System.out.println("Continue? Y or N?");
-            userInput = inputScanner.nextLine();
-            if(userInput.equals("Y") || userInput.equals("y")) {
-                continue;
-            }else if(userInput.equals("N") || userInput.equals("n")) {
-                quit = true;
-            }else {
-                System.out.println("Invalid input. Type Y for yes or N for no.");
+            return documents;
+
+            } catch (IOException e) {
+                log.error(e.getMessage());
             }
+        return null;
+    }
+
+    public List<Result> getResultsFromTopDocs(TopDocs topDocs, int topicNumber) {
+        try{
+            List<Result> results = new ArrayList<>();
+            int rank = 1;
+            for(ScoreDoc hit : topDocs.scoreDocs) {
+                Document doc = searcher.doc(hit.doc);
+                float score = hit.score;
+                Result result = new Result(topicNumber,doc.getField("id").stringValue(),rank,score,"VestricLuceneStandard");
+                results.add(result);
+                rank++;
+            }
+            return results;
+
+        }catch (IOException e) {
+            log.error(e.getMessage());
         }
-
+        return null;
     }
 
 }

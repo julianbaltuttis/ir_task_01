@@ -50,16 +50,16 @@ public class Argument {
     }
     public Document getArgumentAsDocument() {
         Document doc = new Document();
-        doc.add(new StringField(DOC_ID, id, Field.Store.NO));
-        doc.add(new TextField(DOC_CONCLUSION, conclusion, Field.Store.YES));
+        doc.add(new StringField(DOC_ID, id, Field.Store.YES));
+        doc.add(new TextField(DOC_CONCLUSION, conclusion, Field.Store.NO));
 
         for(Premise premise : premises) {
 
-            doc.add(new TextField(DOC_TEXT, premise.getText(), Field.Store.YES));
-            doc.add(new StringField(DOC_STANCE, premise.getStance(), Field.Store.YES));
+            doc.add(new TextField(DOC_TEXT, premise.getText(), Field.Store.NO));
+            doc.add(new StringField(DOC_STANCE, premise.getStance(), Field.Store.NO));
         }
 
-        doc.add(new StringField(DOC_SOURCE_ID, context.get(DOC_SOURCE_ID).asText(), Field.Store.NO));
+        doc.add(new StringField(DOC_SOURCE_ID, context.get(DOC_SOURCE_ID).asText(), Field.Store.YES));
         return doc;
     }
 
