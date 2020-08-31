@@ -48,7 +48,7 @@ public class Topics {
             if(node.getNodeType() == Node.ELEMENT_NODE) {
 
                 Element element = (Element) node;
-                String number = element.getElementsByTagName("number").item(0).getTextContent();
+                String number = element.getElementsByTagName("num").item(0).getTextContent();
                 String title = element.getElementsByTagName("title").item(0).getTextContent();
 
                 Topic topic = new Topic(Integer.parseInt(number), title);

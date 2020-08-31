@@ -1,9 +1,9 @@
 package org;
 
 import lombok.extern.log4j.Log4j;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+
+import org.apache.commons.cli.*;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -18,30 +18,48 @@ public class Main {
         log.info("--> Main().");
         System.out.println("Hello World!");
 
-        /*Indexer index = new Indexer("indexDir","codebase/parliamentary.json", true);
-        index.createIndex();
+        Options options = new Options();
+        Option input = new Option("i", "input", true, "input directory");
+        input.setRequired(true);
+        options.addOption(input);
 
-        index.setOverwrite(false);
-        index.setJsonFilePath("codebase/debateorg.json");
-        index.createIndex();
+        Option output = new Option("o", "output", true, "output directory");
+        output.setRequired(true);
+        options.addOption(output);
 
-        index.setJsonFilePath("codebase/debatepedia.json");
-        index.createIndex();
+        CommandLineParser parser = new DefaultParser();
+        HelpFormatter formatter = new HelpFormatter();
+        CommandLine cmd;
 
-        index.setJsonFilePath("codebase/debatewise.json");
-        index.createIndex();
+        try{
+            cmd = parser.parse(options,args);
+            String inputDirPath = cmd.getOptionValue("input");
+            String outputDirPath = cmd.getOptionValue("output");
 
-        index.setJsonFilePath("codebase/idebate.json");
-        index.createIndex();*/
+            run(inputDirPath, outputDirPath);
 
+        }catch (ParseException e) {
+            log.error(e.getMessage());
+            formatter.printHelp("utility-name", options);
+            System.exit(1);
+        }
 
-        Topics topics = new Topics("codebase/topics.xml");
+        log.info("<-- Main().");
+    }
+
+    public static void run(String inputPath, String outputPath) {
+        log.info("--> run().");
+        String fileInputPath = inputPath+"/topics.xml";
+        System.out.println(fileInputPath);
+        Topics topics = new Topics(fileInputPath);
         List<Topic> topicList = topics.getTopics();
 
-        //TODO Put everything in own method.
+
         try {
             QueryProcessor query = new QueryProcessor();
-            File outputFile = new File("out/run.txt");
+            String fileOutputPath = outputPath+"/run.txt";
+            System.out.println(fileInputPath);
+            File outputFile = new File(fileOutputPath);
             FileWriter writer;
             if(outputFile.createNewFile()) {
                 log.info("File is created!");
@@ -60,7 +78,7 @@ public class Main {
                 TopDocs hits = query.searchIndex(topicTitle);
                 results = query.getResultsFromTopDocs(hits, topicNumber);
                 for(Result result : results){
-
+                    System.out.println(result.toString());
                     writer.write(result.toString());
                 }
 
@@ -70,8 +88,7 @@ public class Main {
             log.error(e.getMessage());
         }
 
-
-        log.info("<-- Main().");
+        log.info("<-- run().");
     }
 
 }

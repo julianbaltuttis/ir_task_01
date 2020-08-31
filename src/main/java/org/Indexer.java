@@ -11,7 +11,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -30,6 +29,26 @@ public class Indexer {
     private IndexWriter indexWriter = null;
 
     private @Setter boolean overwrite;
+
+    public static void main(String[] args) {
+        log.info("--> Indexer.main().");
+        Indexer index = new Indexer("indexDir","codebase/parliamentary.json", true);
+        index.createIndex();
+
+        index.setOverwrite(false);
+        index.setJsonFilePath("codebase/debateorg.json");
+        index.createIndex();
+
+        index.setJsonFilePath("codebase/debatepedia.json");
+        index.createIndex();
+
+        index.setJsonFilePath("codebase/debatewise.json");
+        index.createIndex();
+
+        index.setJsonFilePath("codebase/idebate.json");
+        index.createIndex();
+        log.info("<-- Indexer.main().");
+    }
 
     public Indexer(String indexPath, String jsonFilePath, boolean overwrite) {
         this.indexPath = indexPath;
@@ -96,7 +115,6 @@ public class Indexer {
                     while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
 
                         Argument argument = mapper.readValue(jsonParser, Argument.class);
-                        log.info(argument.toString());
                         indexWriter.addDocument(argument.getArgumentAsDocument());
 
                         numberOfRecords++;
