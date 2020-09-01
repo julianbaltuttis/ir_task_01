@@ -14,6 +14,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
@@ -115,7 +116,8 @@ public class Indexer {
                     while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
 
                         Argument argument = mapper.readValue(jsonParser, Argument.class);
-                        indexWriter.addDocument(argument.getArgumentAsDocument());
+                        String id = argument.getId();
+                        indexWriter.updateDocument(new Term("id",id), argument.getArgumentAsDocument());
 
                         numberOfRecords++;
                         log.info(numberOfRecords);

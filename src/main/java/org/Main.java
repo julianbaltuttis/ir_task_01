@@ -1,9 +1,16 @@
 package org;
 
 import lombok.extern.log4j.Log4j;
-import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.*;
+import org.apache.lucene.search.*;
+
 
 import org.apache.commons.cli.*;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 
 import java.io.File;
 import java.io.FileWriter;

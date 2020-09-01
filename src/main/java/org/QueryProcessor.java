@@ -11,6 +11,7 @@ import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.TopDocsCollector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.search.ScoreDoc;
@@ -23,8 +24,8 @@ import java.util.Scanner;
 //TODO add Tag attribute.
 @Log4j
 public class QueryProcessor {
-    public static final String INDEX_DIR = "indexDir";
-    public static final int SEARCH_RESULTS = 10;
+    public static final String INDEX_DIR = "/home/vestric/ir_task/indexDir";
+    public static final int SEARCH_RESULTS = 1000;
 
     private IndexReader indexReader;
     private IndexSearcher searcher;
@@ -43,7 +44,7 @@ public class QueryProcessor {
     public TopDocs searchIndex (String query) {
 
         try {
-
+            
             MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[] {"conclusion","text"}, analyzer);
             TopDocs topDocs = searcher.search(queryParser.parse(query),SEARCH_RESULTS);
             List<Document> documents = new ArrayList<>();
