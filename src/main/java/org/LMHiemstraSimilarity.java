@@ -41,8 +41,8 @@ public class LMHiemstraSimilarity extends LMSimilarity {
     @Override
     protected double score(BasicStats stats, double freq, double docLen) {
         double termFreqDivNumOfTokens = ((LMStats)stats).getCollectionProbability();
-        double score =  SimilarityModelHelper.log(((1 - lambda) * (freq / docLen)) / (lambda * termFreqDivNumOfTokens) + 1)
-                        + SimilarityModelHelper.log(lambda * termFreqDivNumOfTokens);
+        double score =  stats.getBoost() * (SimilarityModelHelper.log(((1 - lambda) * (freq / docLen)) / (lambda * termFreqDivNumOfTokens) + 1)
+                        + SimilarityModelHelper.log(lambda * termFreqDivNumOfTokens));
         if (score > 0.0d) {
             return score;
         }

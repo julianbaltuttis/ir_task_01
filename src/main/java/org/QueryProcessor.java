@@ -10,12 +10,9 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.search.TopDocsCollector;
+import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.search.ScoreDoc;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,6 +46,8 @@ public class QueryProcessor {
         try {
             
             MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[] {"conclusion","text"}, analyzer);
+
+
             TopDocs topDocs = searcher.search(queryParser.parse(query),SEARCH_RESULTS);
             List<Document> documents = new ArrayList<>();
 
