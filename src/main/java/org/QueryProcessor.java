@@ -1,6 +1,7 @@
 package org;
 
 
+import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -21,11 +22,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-//TODO add Tag attribute.
+
 @Log4j
 public class QueryProcessor {
     public static final String INDEX_DIR = "/home/vestric/ir_task/indexDir";
     public static final int SEARCH_RESULTS = 1000;
+    @Setter private String tag;
 
     private IndexReader indexReader;
     private IndexSearcher searcher;
@@ -33,7 +35,8 @@ public class QueryProcessor {
     private Directory dir;
     private Analyzer analyzer;
 
-    public QueryProcessor() throws IOException {
+    public QueryProcessor(String tag) throws IOException {
+        this.tag = tag;
         this.indexDirectory = new File(INDEX_DIR);
         this.dir = FSDirectory.open(indexDirectory.toPath());
         this.analyzer = new StandardAnalyzer();
@@ -80,7 +83,7 @@ public class QueryProcessor {
             for(ScoreDoc hit : topDocs.scoreDocs) {
                 Document doc = searcher.doc(hit.doc);
                 float score = hit.score;
-                Result result = new Result(topicNumber,doc.getField("id").stringValue(),rank,score,"VestricLuceneStandard");
+                Result result = new Result(topicNumber,doc.getField("id").stringValue(),rank,score,tag);
                 results.add(result);
                 rank++;
             }

@@ -34,6 +34,11 @@ public class Main {
         output.setRequired(true);
         options.addOption(output);
 
+
+        Option tag = new Option("t", "tag", true, "Method Description");
+        input.setRequired(true);
+        options.addOption(tag);
+
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
         CommandLine cmd;
@@ -42,8 +47,9 @@ public class Main {
             cmd = parser.parse(options,args);
             String inputDirPath = cmd.getOptionValue("input");
             String outputDirPath = cmd.getOptionValue("output");
+            String methodTag = cmd.getOptionValue("tag");
 
-            run(inputDirPath, outputDirPath);
+            run(inputDirPath, outputDirPath, methodTag);
 
         }catch (ParseException e) {
             log.error(e.getMessage());
@@ -54,7 +60,7 @@ public class Main {
         log.info("<-- Main().");
     }
 
-    public static void run(String inputPath, String outputPath) {
+    public static void run(String inputPath, String outputPath, String tag) {
         log.info("--> run().");
         String fileInputPath = inputPath+"/topics.xml";
         System.out.println(fileInputPath);
@@ -63,7 +69,7 @@ public class Main {
 
 
         try {
-            QueryProcessor query = new QueryProcessor();
+            QueryProcessor query = new QueryProcessor(tag);
             String fileOutputPath = outputPath+"/run.txt";
             System.out.println(fileInputPath);
             File outputFile = new File(fileOutputPath);
