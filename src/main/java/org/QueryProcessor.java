@@ -11,6 +11,8 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.*;
+import org.apache.lucene.search.similarities.BM25Similarity;
+import org.apache.lucene.search.similarities.LMDirichletSimilarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
@@ -39,6 +41,7 @@ public class QueryProcessor {
         this.analyzer = new StandardAnalyzer();
         this.indexReader = DirectoryReader.open(dir);
         this.searcher = new IndexSearcher(indexReader);
+        this.searcher.setSimilarity(new LMHiemstraSimilarity());
     }
 
     public TopDocs searchIndex (String query) {
@@ -46,7 +49,6 @@ public class QueryProcessor {
         try {
             
             MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[] {"conclusion","text"}, analyzer);
-
 
             TopDocs topDocs = searcher.search(queryParser.parse(query),SEARCH_RESULTS);
             List<Document> documents = new ArrayList<>();
