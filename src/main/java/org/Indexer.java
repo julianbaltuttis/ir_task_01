@@ -15,6 +15,7 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.similarities.LMDirichletSimilarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
@@ -33,20 +34,20 @@ public class Indexer {
 
     public static void main(String[] args) {
         log.info("--> Indexer.main().");
-        Indexer index = new Indexer("indexDir","codebase/parliamentary.json", true);
+        Indexer index = new Indexer("/home/vestric/ir_task/indexDir","/media/training-datasets/touche-task-1/touche-2020-first-subtask-2020-04-20/debateorg.json", true);
         index.createIndex();
 
         index.setOverwrite(false);
-        index.setJsonFilePath("codebase/debateorg.json");
+        index.setJsonFilePath("/media/training-datasets/touche-task-1/touche-2020-first-subtask-2020-04-20/parliamentary.json");
         index.createIndex();
 
-        index.setJsonFilePath("codebase/debatepedia.json");
+        index.setJsonFilePath("/media/training-datasets/touche-task-1/touche-2020-first-subtask-2020-04-20/debatepedia.json");
         index.createIndex();
 
-        index.setJsonFilePath("codebase/debatewise.json");
+        index.setJsonFilePath("/media/training-datasets/touche-task-1/touche-2020-first-subtask-2020-04-20/debatewise.json");
         index.createIndex();
 
-        index.setJsonFilePath("codebase/idebate.json");
+        index.setJsonFilePath("/media/training-datasets/touche-task-1/touche-2020-first-subtask-2020-04-20/idebate.json");
         index.createIndex();
         log.info("<-- Indexer.main().");
     }

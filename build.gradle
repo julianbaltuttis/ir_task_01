@@ -13,7 +13,7 @@ apply plugin: 'java'
 sourceCompatibility = 1.8
 
 application {
-    mainClassName = "org.Main"
+    mainClassName = "org.Indexer"
 }
 
 sourceSets {
